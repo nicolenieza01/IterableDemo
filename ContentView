@@ -1,0 +1,70 @@
+import SwiftUI
+import IterableSDK
+
+struct ContentView: View {
+    
+    var body: some View {
+        
+        
+        VStack(spacing: 20) {
+            
+            
+            Text("Iterable Demo")
+                .font(.title)
+
+            // P1 Button
+            Button("Update Profile") {
+                
+                IterableAPI.updateUser(
+                    [
+                        "firstName": "Nicole",
+                        "isRegisteredUser": true,
+                        "SA_User_Test_Key": "completed"
+                    ],
+                    mergeNestedObjects: false
+                )
+            }
+            .padding()
+            .background(Color.blue)
+            .foregroundColor(.white)
+            .cornerRadius(10)
+
+            // P2 Button
+            Button("Events and In-App Messages") {
+                
+                IterableAPI.track(
+                    event: "mobileSATestEvent",
+                    dataFields: [
+                        "platform": "iOS",
+                        "isTestEvent": true,
+                        "url": "https://iterable.com/sa-test/Nicole",
+                        "secret_code_key": "Code_123"
+]
+)
+}
+            .padding()
+            .background(Color.blue)
+            .foregroundColor(.white)
+            .cornerRadius(10)
+            
+            //P3 Button
+            Button("Retrieve Message"){
+                
+                let messages = IterableAPI.inAppManager.getMessages()
+                if let message = messages.first {
+                    
+                    IterableAPI.inAppManager.show(message: message)
+                }
+                else {
+                    
+                    print("error: empty")
+                }
+            }
+            .padding()
+            .background(Color.blue)
+            .foregroundColor(.white)
+            .cornerRadius(10)
+        }
+        .padding()
+    }
+}
