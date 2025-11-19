@@ -1,0 +1,29 @@
+import SwiftUI
+import IterableSDK
+
+@main
+struct IterableDemoApp: App {
+    init() {
+        let config = IterableConfig()
+
+        IterableAPI.initialize(
+            apiKey: "5145e75c49bc493299a5c31361825f77",
+            launchOptions: nil,
+            config: config
+        )
+
+        
+        IterableAPI.setEmail("nicole.niezabytowski@gmail.com")
+
+        IterableAPI.updateUser(
+            ["email": "nicole.niezabytowski@gmail.com"],
+            mergeNestedObjects: false
+        )
+    }
+
+    var body: some Scene {
+        WindowGroup {
+            ContentView()
+        }
+    }
+}
