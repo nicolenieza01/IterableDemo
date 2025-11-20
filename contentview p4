@@ -1,0 +1,100 @@
+import SwiftUI
+import IterableSDK
+
+struct ContentView: View {
+    
+    private let placementID = 106
+    @StateObject private var embedded = EmbeddedMessages(placementId: 106)
+    
+    var body: some View {
+        
+        
+        VStack(spacing: 20) {
+            
+            
+            Text("Iterable Demo")
+                .font(.title)
+
+            // P1 Button
+            Button("Update Profile") {
+                
+                IterableAPI.updateUser(
+                    [
+                        "firstName": "Nicole",
+                        "isRegisteredUser": true,
+                        "SA_User_Test_Key": "completed"
+                    ],
+                    mergeNestedObjects: false
+                )
+            }
+            .padding()
+            .background(Color.blue)
+            .foregroundColor(.white)
+            .cornerRadius(10)
+
+            // P2 Button
+            Button("Events and In-App Messages") {
+                
+                IterableAPI.track(
+                    event: "mobileSATestEvent",
+                    dataFields: [
+                        "platform": "iOS",
+                        "isTestEvent": true,
+                        "url": "https://iterable.com/sa-test/Nicole",
+                        "secret_code_key": "Code_123"
+]
+)
+                IterableAPI.embeddedManager.syncMessages(){
+                    
+                }
+}
+//            IterableAPI.embeddedManager.syncMessages(){
+//                
+//            }
+            
+            .padding()
+            .background(Color.blue)
+            .foregroundColor(.white)
+            .cornerRadius(10)
+            
+            //P3 Button
+            Button("Retrieve Message"){
+                
+                let messages = IterableAPI.inAppManager.getMessages()
+                if let message = messages.first {
+                    
+                    IterableAPI.inAppManager.show(message: message)
+                }
+                else {
+                    
+                    print("error: empty")
+                }
+            }
+            .padding()
+            .background(Color.blue)
+            .foregroundColor(.white)
+            .cornerRadius(10)
+            
+            
+            //P4 Embedded Messages
+            if let message = embedded.current {
+                Text("embedded message")
+                    .font(.headline)
+                
+                EmbeddedCard(message: message)
+                    .frame(height:220)
+                    .padding(.horizontal)
+            }
+            else {
+                Text("embedded message (mock)")
+                    .font(.headline)
+                    
+                MockEmbeddedMessage()
+                    .frame(height: 220)
+                    .padding(.horizontal)
+            }
+            Spacer()
+        }
+        .padding()
+    }
+}
