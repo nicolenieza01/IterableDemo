@@ -1,0 +1,35 @@
+import Foundation
+import SwiftUI
+import IterableSDK
+import UIKit
+
+struct EmbeddedCard: UIViewRepresentable {
+    let message: IterableEmbeddedMessage
+
+    func makeUIView(context: Context) -> UIView {
+        
+        let config = IterableEmbeddedViewConfig(
+            backgroundColor: UIColor.white,
+            borderColor: UIColor.purple,
+            borderWidth: 1.0,
+            borderCornerRadius: 8.0,
+            primaryBtnBackgroundColor: UIColor.purple,
+            primaryBtnTextColor: UIColor.white,
+            secondaryBtnBackgroundColor: UIColor.white,
+            secondaryBtnTextColor: UIColor.purple,
+            titleTextColor: UIColor.black,
+            bodyTextColor: UIColor.black
+        )
+
+       
+        let iterableEmbeddedView = IterableEmbeddedView(
+            message: message,
+            viewType: .card,
+            config: config
+        )
+
+        return iterableEmbeddedView
+    }
+
+    func updateUIView(_ uiView: UIView, context: Context) { }
+}
