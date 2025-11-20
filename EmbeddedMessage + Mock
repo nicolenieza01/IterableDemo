@@ -1,0 +1,73 @@
+import Foundation
+import IterableSDK
+import SwiftUI
+
+final class EmbeddedMessages: ObservableObject, IterableEmbeddedUpdateDelegate {
+    @Published var current: IterableEmbeddedMessage?
+    private let placementId: Int
+    
+    init(placementId: Int) {
+        self.placementId = placementId
+        
+        
+        IterableAPI.embeddedManager.addUpdateListener(self)
+        
+        onMessagesUpdated()
+    }
+    
+    deinit {
+        IterableAPI.embeddedManager.removeUpdateListener(self)
+    }
+    
+    func onMessagesUpdated() {
+        
+        let messages = IterableAPI.embeddedManager.getMessages(for: self.placementId)
+        current = messages.first
+        
+    }
+    
+    func onEmbeddedMessagingDisabled() {
+        current = nil
+    }
+    
+}
+    
+    
+    struct MockEmbeddedMessage: View {
+        var body: some View {
+            VStack(alignment: .leading, spacing: 12) {
+                Text("Iterable Soultions Architect!!!!")
+                    .font(.headline)
+                
+                Text("Use code NICOLE20 for 20 percent off!!")
+                    .font(.subheadline)
+                
+                Spacer().frame(height: 8)
+                
+                HStack {
+                    Button("Order Now") {
+                        
+                    }
+                    .padding(.vertical, 8)
+                    .padding(.horizontal, 16)
+                    .background(Color.pink)
+                    .foregroundColor(.white)
+                    .cornerRadius(8)
+                    
+                    Spacer()
+                    
+                    Button("Dismiss") { }
+                        .font(.caption)
+                        .foregroundColor(.purple)
+                }
+            }
+            .padding()
+            .frame(maxWidth: .infinity)
+            .background(
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(Color.white)
+                    .shadow(radius: 4)
+            )
+        }
+    }
+
